@@ -1,0 +1,7 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+numpy
+requests
+python-dotenv
+# Parakeet TDT 0.6B v2 on CPU via ONNX Runtime (no NeMo / PyTorch needed)
+onnx-asr[cpu,hub]

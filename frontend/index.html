@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MedScribe – Live Medical Transcription</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="layout">
+
+  <!-- LEFT: live transcription -->
+  <section class="card">
+    <h2 class="title">🎙 Live Medical Transcription</h2>
+
+    <div class="btn-row">
+      <button id="btnStart" class="pill primary">Start Mic</button>
+      <button id="btnStop" class="pill danger" disabled>Stop</button>
+      <button id="btnClear" class="pill ghost">Clear</button>
+      <button id="btnSave" class="pill success">Save Recording</button>
+    </div>
+
+    <div class="badges">
+      <span class="badge">WORDS: <b id="words">0</b></span>
+      <span class="badge">CHUNKS: <b id="chunks">0</b></span>
+    </div>
+
+    <div id="status" class="box status-box" aria-live="polite"></div>
+    <div id="transcript" class="box transcript-box">
+      <span class="placeholder">Ready — click Start Mic and speak naturally. VAD will auto-chunk your speech.</span>
+    </div>
+
+    <button id="btnProcess" class="wide primary">⚡ Process Transcript with AI</button>
+    <div id="error" class="error" hidden></div>
+  </section>
+
+  <!-- RIGHT: AI summary -->
+  <section class="card">
+    <div class="head-row">
+      <h2 class="title">⌛ AI Medical Summary</h2>
+      <button id="btnClearSummary" class="clear-sm">✕ Clear</button>
+    </div>
+
+    <div class="scroll" id="summary">
+      <div class="patient">
+        <div><b>Patient Name:</b> <span id="pName">—</span></div>
+        <div class="muted">Age: <span id="pAge">—</span> &nbsp; Gender: <span id="pSex">—</span></div>
+      </div>
+
+      <h3>Clinical Summary</h3>
+      <div id="sClinical" class="summary-box">AI-generated clinical summary will appear here…</div>
+
+      <h3>Chief Complaints</h3>
+      <div id="sChief" class="empty">No complaints extracted yet</div>
+
+      <h3>History of Present Illness</h3>
+      <div id="sHpi" class="empty">No history extracted yet</div>
+
+      <h3>Symptoms</h3>
+      <div id="sSymptoms" class="empty">No symptoms extracted yet</div>
+
+      <h3>Clinical Impression</h3>
+      <div id="sAssessment" class="empty">No diagnosis inferred</div>
+
+      <h3>Medications</h3>
+      <div id="sMeds" class="empty">No medications extracted yet</div>
+
+      <h3>Examinations &amp; Tests</h3>
+      <div id="sExam" class="empty">No examinations extracted yet</div>
+
+      <h3>Allergies</h3>
+      <div id="sAllergies" class="empty">No allergies extracted yet</div>
+
+      <h3>Past Medical History</h3>
+      <div id="sPmh" class="empty">No past medical history extracted</div>
+
+      <h3>History &amp; Follow-up</h3>
+      <div id="sPlan" class="empty">No plan extracted yet</div>
+      
+      <h3>Transcription Check</h3>
+      <div id="sNotes" class="empty">Nothing flagged</div>
+    </div>
+
+    <button id="btnCopy" class="wide primary">Copy to Prescription</button>
+  </section>
+
+</main>
+
+<!-- Shown only when name / age / sex were not said in the conversation -->
+<div id="patientModal" class="modal" hidden>
+  <form id="patientForm" class="modal-card">
+    <h3 class="modal-title">Patient details missing</h3>
+    <p class="muted">These were not mentioned in the conversation. Add them before the summary is shown.</p>
+    <label id="pm-name-wrap">Patient name
+      <input id="pm-name" type="text" autocomplete="off" placeholder="e.g. Tushar">
+    </label>
+    <label id="pm-age-wrap">Age
+      <input id="pm-age" type="number" min="0" max="120" placeholder="e.g. 30">
+    </label>
+    <label id="pm-sex-wrap">Gender
+      <select id="pm-sex">
+        <option value="">Select…</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+    </label>
+    <div class="modal-actions">
+      <button type="button" id="pm-skip" class="pill ghost">Skip</button>
+      <button type="submit" class="pill primary">Save &amp; show summary</button>
+    </div>
+  </form>
+</div>
+
+<!-- Silero VAD runs in the browser, so silence/noise never reaches the ASR -->
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.wasm.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.24/dist/bundle.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
